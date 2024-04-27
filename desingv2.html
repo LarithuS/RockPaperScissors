@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>RPS - The Game</title>
+</head>
+<body>
+  <p>RPS - The Game</p>
+  <button onclick="moveGent('rock')">Rock</button>
+  <button onclick="moveGent('paper')">Paper</button>
+  <button onclick="moveGent('scissors')">Scissors</button>
+  <button onclick="reset()">Reset Score</button>
+  <script>
+    let compMove = '';
+    let result = ''
+    const score = {
+      wins:0,losses:0,ties:0,
+    }
+    function moveGent(move) {
+      const x = Math.random();
+      if (x >= 0 && x < 1 / 3) {
+        compMove = 'rock';
+      } else if (x >= 1 / 3 && x <= 2 / 3) {
+        compMove = 'paper';
+      } else if (x >= 2 / 3 && x < 1) {
+        compMove = 'scissors'
+      }
+      if (move === 'scissors') {
+        if (compMove === 'rock') {
+          result = 'You lose.';
+        } else if (compMove == 'paper') {
+          result = 'You win.';
+        } else {
+          result = 'Tie.';
+        }} else if (move === 'paper') {
+          if (compMove === 'rock') {
+            result = 'You win.';
+          } else if (compMove == 'paper') {
+            result = 'Tie.';
+          } else {
+            result = 'You lose.';
+          }} else if (move === 'rock') {
+            if (compMove === 'rock') {
+              result = 'Tie';
+            } else if (compMove == 'paper') {
+              result = 'You lose.';
+            } else {
+              result = 'You win.';
+            }
+        }
+        if (result === 'You win.'){
+          score.wins ++
+        }else if (result === 'You lose.'){
+          score.losses ++
+        }else{
+          score.ties ++
+        }
+        alert(`You picked ${move}. Computer picked ${compMove}. ${result}
+Wins ${score.wins}, Losses ${score.losses}, Ties ${score.ties}`);
+      }
+  </script>
+
+
+</body>
+
+</html>
