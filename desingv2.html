@@ -1,65 +1,168 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>RPS - The Game</title>
-</head>
-<body>
-  <p>RPS - The Game</p>
-  <button onclick="moveGent('rock')">Rock</button>
-  <button onclick="moveGent('paper')">Paper</button>
-  <button onclick="moveGent('scissors')">Scissors</button>
-  <button onclick="reset()">Reset Score</button>
-  <script>
-    let compMove = '';
-    let result = ''
-    const score = {
-      wins:0,losses:0,ties:0,
+  <head>
+    <title>RPS - The Game</title>
+  <style>
+    body{
+      background-color: rgb(25, 25, 25);
+      color:white;
+      font-family: Arial, Helvetica, sans-serif;
     }
-    function moveGent(move) {
-      const x = Math.random();
-      if (x >= 0 && x < 1 / 3) {
-        compMove = 'rock';
-      } else if (x >= 1 / 3 && x <= 2 / 3) {
-        compMove = 'paper';
-      } else if (x >= 2 / 3 && x < 1) {
-        compMove = 'scissors'
-      }
-      if (move === 'scissors') {
-        if (compMove === 'rock') {
-          result = 'You lose.';
-        } else if (compMove == 'paper') {
-          result = 'You win.';
-        } else {
-          result = 'Tie.';
-        }} else if (move === 'paper') {
-          if (compMove === 'rock') {
-            result = 'You win.';
-          } else if (compMove == 'paper') {
-            result = 'Tie.';
+    .title{
+      font-size: 50px;
+      font-weight: bold;
+      text-align: center;
+    }
+    button{
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background-color:transparent;
+      color:white;
+    }
+    button:hover{
+      cursor:pointer;
+      background-color:rgb(50,50,50)
+    }
+    img{
+      width:75px;
+    }
+    .reset{
+      border-radius:0;
+      height:25px;
+      position: fixed;
+      bottom:10px;
+      right: 10px
+    }
+    #score-wins{
+      color:green;
+      margin-left: 100px;
+      font-size: 50px;
+    }
+    #score-losses{
+      color:red;
+      margin-right: 100px;
+      font-size: 50px;  
+
+    }
+    #column{
+      font-size: 50px;
+    }
+    div{
+      display: flex;
+      justify-content: space-between;
+      border:solid 1px white;
+      max-width: 1000px;
+      margin: auto;
+    }
+    .moves{
+      border:none;
+      margin-top: 50px;
+      max-width: 750px;
+
+    }
+    .now{
+      border:none;
+      margin-top:50px
+    }
+  </style>
+  </head>
+  <body onload="getScore()">
+    <p class="title">RPS - The Game</p>
+    <div><p id="score-wins"></p><p id="column">:</p><p id="score-losses"></p></div>
+    <div class="moves"><button onclick="moveGent('rock')"><img src="https://static-00.iconduck.com/assets.00/rock-emoji-1020x1024-062koyqu.png" alt="rock"></button>
+      <button onclick="moveGent('paper')"><img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fhotemoji.com%2Fimages%2Fdl%2Ft%2Froll-of-paper-emoji-by-google.png&f=1&nofb=1&ipt=2cb0a6a52b8c208b7106fee5bf37c116292ce33765ae1c733502b2afa1c9108c&ipo=images" alt="paper"></button>
+      <button onclick="moveGent('scissors')"><img src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.emoji.co.uk%2Ffiles%2Ftwitter-emojis%2Fobjects-twitter%2F11058-black-scissors.png&f=1&nofb=1&ipt=8746e68c0c571eae8ab8423ae279719536e60d0f8521443a120adaf3e352c9b0&ipo=images" alt="scissors"></button></div>
+    
+    <p id="result"></p>
+    
+    <button class="reset"
+      onclick="score.wins=0;score.losses=0;score.ties=0;localStorage.removeItem('score')"
+    >
+      Reset Score
+  </button>
+  <div class="now">
+    <img src="https://cdn.shopify.com/s/files/1/1061/1924/products/35_grande.png?v=1571606117"><img id="player-move"><img id="computer-move"><img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcreazilla-store.fra1.digitaloceanspaces.com%2Femojis%2F46886%2Fdesktop-computer-emoji-clipart-md.png&f=1&nofb=1&ipt=b4b38b6258fdf2460e3a6c61a926337f0e5ec1fa1c5634afde9b6eabadbac358&ipo=images">
+    </div>
+  <!--<div class="history">
+    </div>-->
+
+    <script>
+      let compMove = "";
+      let result = "";
+      let score = JSON.parse(localStorage.getItem("score")) || {
+        wins: 0,
+        losses: 0,
+        ties: 0,
+      };
+
+      console.log(JSON.parse(localStorage.getItem("score")) || score);
+      function moveGent(move) {
+        const x = Math.random();
+        if (x >= 0 && x < 1 / 3) {
+          compMove = "rock";
+        } else if (x >= 1 / 3 && x <= 2 / 3) {
+          compMove = "paper";
+        } else if (x >= 2 / 3 && x < 1) {
+          compMove = "scissors";
+        }
+        if (move === "scissors") {
+          document.getElementById("player-move").setAttribute("src","https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.emoji.co.uk%2Ffiles%2Ftwitter-emojis%2Fobjects-twitter%2F11058-black-scissors.png&f=1&nofb=1&ipt=8746e68c0c571eae8ab8423ae279719536e60d0f8521443a120adaf3e352c9b0&ipo=images");
+          if (compMove === "rock") {
+            result = "You lose.";
+            document.getElementById("computer-move").setAttribute("src","https://static-00.iconduck.com/assets.00/rock-emoji-1020x1024-062koyqu.png");
+          } else if (compMove == "paper") {
+            result = "You win.";
+            document.getElementById("computer-move").setAttribute("src","https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fhotemoji.com%2Fimages%2Fdl%2Ft%2Froll-of-paper-emoji-by-google.png&f=1&nofb=1&ipt=2cb0a6a52b8c208b7106fee5bf37c116292ce33765ae1c733502b2afa1c9108c&ipo=images");
           } else {
-            result = 'You lose.';
-          }} else if (move === 'rock') {
-            if (compMove === 'rock') {
-              result = 'Tie';
-            } else if (compMove == 'paper') {
-              result = 'You lose.';
-            } else {
-              result = 'You win.';
-            }
+            result = "Tie.";
+            document.getElementById("computer-move").setAttribute("src","https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.emoji.co.uk%2Ffiles%2Ftwitter-emojis%2Fobjects-twitter%2F11058-black-scissors.png&f=1&nofb=1&ipt=8746e68c0c571eae8ab8423ae279719536e60d0f8521443a120adaf3e352c9b0&ipo=images");
+          }
+        } else if (move === "paper") {
+          document.getElementById("player-move").setAttribute("src","https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fhotemoji.com%2Fimages%2Fdl%2Ft%2Froll-of-paper-emoji-by-google.png&f=1&nofb=1&ipt=2cb0a6a52b8c208b7106fee5bf37c116292ce33765ae1c733502b2afa1c9108c&ipo=images");
+          if (compMove === "rock") {
+            result = "You win.";
+            document.getElementById("computer-move").setAttribute("src","https://static-00.iconduck.com/assets.00/rock-emoji-1020x1024-062koyqu.png");
+          } else if (compMove == "paper") {
+            result = "Tie.";
+            document.getElementById("computer-move").setAttribute("src","https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fhotemoji.com%2Fimages%2Fdl%2Ft%2Froll-of-paper-emoji-by-google.png&f=1&nofb=1&ipt=2cb0a6a52b8c208b7106fee5bf37c116292ce33765ae1c733502b2afa1c9108c&ipo=images");
+          } else {
+            result = "You lose.";
+            document.getElementById("computer-move").setAttribute("src","https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.emoji.co.uk%2Ffiles%2Ftwitter-emojis%2Fobjects-twitter%2F11058-black-scissors.png&f=1&nofb=1&ipt=8746e68c0c571eae8ab8423ae279719536e60d0f8521443a120adaf3e352c9b0&ipo=images");
+          }
+        } else if (move === "rock") {
+          document.getElementById("player-move").setAttribute("src","https://static-00.iconduck.com/assets.00/rock-emoji-1020x1024-062koyqu.png");
+          if (compMove === "rock") {
+            result = "Tie";
+            document.getElementById("computer-move").setAttribute("src","https://static-00.iconduck.com/assets.00/rock-emoji-1020x1024-062koyqu.png");
+          } else if (compMove == "paper") {
+            result = "You lose.";
+            document.getElementById("computer-move").setAttribute("src","https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fhotemoji.com%2Fimages%2Fdl%2Ft%2Froll-of-paper-emoji-by-google.png&f=1&nofb=1&ipt=2cb0a6a52b8c208b7106fee5bf37c116292ce33765ae1c733502b2afa1c9108c&ipo=images");
+          } else {
+            result = "You win.";
+            document.getElementById("computer-move").setAttribute("src","https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.emoji.co.uk%2Ffiles%2Ftwitter-emojis%2Fobjects-twitter%2F11058-black-scissors.png&f=1&nofb=1&ipt=8746e68c0c571eae8ab8423ae279719536e60d0f8521443a120adaf3e352c9b0&ipo=images");
+          }
         }
-        if (result === 'You win.'){
-          score.wins ++
-        }else if (result === 'You lose.'){
-          score.losses ++
-        }else{
-          score.ties ++
+        if (result === "You win.") {
+          score.wins++;
+        } else if (result === "You lose.") {
+          score.losses++;
+        } else {
+          score.ties++;
         }
-        alert(`You picked ${move}. Computer picked ${compMove}. ${result}
-Wins ${score.wins}, Losses ${score.losses}, Ties ${score.ties}`);
+
+        localStorage.setItem("score", JSON.stringify(score));
+
+        /*alert(`You picked ${move}. Computer picked ${compMove}. ${result}
+Wins ${score.wins}, Losses ${score.losses}, Ties ${score.ties}`);*/
+        document.getElementById("result").innerHTML = `${result}`;
+        document.getElementById("score-wins").innerHTML = `${score.wins}`;
+        document.getElementById("score-losses").innerHTML = `${score.losses}`;
       }
-  </script>
-
-
-</body>
-
+      function getScore() {
+        document.getElementById("score-wins").innerHTML = `${score.wins}`;
+        document.getElementById("score-losses").innerHTML = `${score.losses}`;
+      }
+    </script>
+  </body>
 </html>
