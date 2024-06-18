@@ -19,6 +19,7 @@
       border-radius: 50%;
       background-color:transparent;
       color:white;
+      border-color:white;
     }
     button:hover{
       cursor:pointer;
@@ -77,7 +78,10 @@
     <p id="result"></p>
     
     <button class="reset"
-      onclick="score.wins=0;score.losses=0;score.ties=0;localStorage.removeItem('score')"
+      onclick="score.wins=0;score.losses=0;score.ties=0;
+      document.getElementById('score-wins').innerHTML = `${score.wins}`;
+        document.getElementById('score-losses').innerHTML = `${score.losses}`;
+      localStorage.removeItem('score')"
     >
       Reset Score
   </button>
